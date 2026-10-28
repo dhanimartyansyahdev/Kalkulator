@@ -25,14 +25,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Prepare environment & debug keystore
         run: |
-          # Create .env if not exists
+          # Create .env from .env.example if missing
           if [ ! -f .env ]; then
             if [ -f .env.example ]; then
               cp .env.example .env
@@ -41,7 +40,7 @@ jobs:
             fi
           fi
 
-          # Ensure debug.keystore exists for signingConfig
+          # Ensure debug.keystore is present
           if [ ! -f debug.keystore ]; then
             if [ -f debug.keystore.base64 ]; then
               base64 -d debug.keystore.base64 > debug.keystore
@@ -56,6 +55,11 @@ jobs:
                 -keyalg RSA \
                 -keysize 2048
             fi
+          fi
+
+          # Accept Android SDK licenses if needed
+          if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses 2>/dev/null || true
           fi
 
           chmod +x gradlew

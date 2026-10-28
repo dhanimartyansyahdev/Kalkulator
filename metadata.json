@@ -1,0 +1,6 @@
+{
+  "name": "Ryota Calculator",
+  "description": "A cute Shiba Inu themed calculator featuring Ryota the puppy, inspired by Daily UI 004.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
